@@ -40,7 +40,7 @@ function FormList(props) {
   return (
     <Grid container direction="column" justifyContent="space-evenly" alignItems="stretch">
       <Grid item><Typography>Add Form</Typography></Grid>
-      <Grid item direction="row" justifyContent="space-around" alignItems="stretch">
+      <Grid item direction="row" justifyContent="space-evenly" alignItems="stretch">
         <TextField item
           value={formURL}
           onChange={(e) => setFormURL(e.target.value)}
@@ -52,17 +52,19 @@ function FormList(props) {
         <Button item onClick={handleAddValue}>Add Value</Button>
       </Grid>
 
+      <Grid container direction="column" justifyContent="center" alignItems="center" >
       {Array.isArray(newForm)
       ? newForm.map( (value, index) => (
-        <Grid container direction="row" justifyContent="center" alignItems="center" key={index}>
-          <TextLink
+          <Grid item key={index}>
+            <TextLink
             id= {value.label + "-TextLink" }
             target="_blank"
             href={value.url} >
             {value.label}
-          </TextLink>
-          <Button onClick={() => handleDeleteValue(index)}>Delete</Button>
-        </Grid> ) )
+            </TextLink>
+            <Button onClick={() => handleDeleteValue(index)}>Delete</Button>
+          </Grid>
+        ) )
       : typeof newForm === "object"
       ? <TextLink
           id= {newForm.label + "-TextLink" }
@@ -71,6 +73,7 @@ function FormList(props) {
           {newForm.label}
         </TextLink> : null
       }
+      </Grid>
     </Grid>
   )
 }

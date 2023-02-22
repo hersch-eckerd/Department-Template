@@ -19,13 +19,14 @@ const styles = () => ({
 const DepartmentTemplateCard = (props) => {
     const { classes } = props;
     const { configuration: { customConfiguration:  {settings, formList} }} = useCardInfo();
-    const title = settings ? settings.title : undefined;
-    const summary = settings ? settings.summary : undefined;
+
+    const title = settings ? settings.title : "Title";
+    const summary = settings ? settings.summary : "Summary";
     const dirBool = settings ? settings.dirBool : 0;
     const blog = settings ? settings.blog : false;
     const forms = formList ? formList : [];
     const [value, setValue] = useState({
-        index: 0,
+        index: '0',
         text: 'default'
     });
 
@@ -62,9 +63,9 @@ const DepartmentTemplateCard = (props) => {
                             {value.label}
                       </TextLink>
                     ))}
-                    {value.index == 0 && <Typography variant='caption'> {summary} </Typography>}
-                    {value.index == 1 && value.text}
-                    {value.index == 2 && value.text}
+                    {value.index == '0' && <Typography variant='caption'> {summary} </Typography>}
+                    {value.index == '1' && value.text}
+                    {value.index == '2' && value.text}
                 </TabLayoutContent>
             </TabLayout>
         </Grid>

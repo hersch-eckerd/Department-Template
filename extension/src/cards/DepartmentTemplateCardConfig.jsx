@@ -29,7 +29,7 @@ const DepartmentTemplateCardConfig = (props) => {
                 client: {settings, formList}
             }
         })
-    })
+    }, [settings, formList])
 
     const handleChange = (tabLabel, e) => {
         setSettings({
@@ -51,20 +51,20 @@ const DepartmentTemplateCardConfig = (props) => {
         <Grid container direction="column" justifyContent="space-around" alignItems="flex-start" >
             <Grid item >
                 <TextField
-                label= "Title of Organization"
-                margin="normal"
-                onBlur={handleBlur}
-                onChange={(e) => handleChange("title", e)}
-                placeholder="ITS"
-                value={settings.title}
+                    label= "Title of Organization"
+                    margin="normal"
+                    onBlur={handleBlur}
+                    onChange={(e) => handleChange("title", e)}
+                    placeholder="ITS"
+                    value={settings.title}
                 />
                 <TextField
-                label="Summary of Organization"
-                margin="normal"
-                onBlur={handleBlur}
-                onChange={(e) => handleChange("summary", e)}
-                placeholder="Lorem Ipsum"
-                value={settings.summary}
+                    label="Summary of Organization"
+                    margin="normal"
+                    onBlur={handleBlur}
+                    onChange={(e) => handleChange("summary", e)}
+                    placeholder="Lorem Ipsum"
+                    value={settings.summary}
                 />
             </Grid>
             <FormControl component="fieldset">
