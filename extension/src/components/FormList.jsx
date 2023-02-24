@@ -1,16 +1,21 @@
 import React, {useEffect, useState} from 'react';
 import { withStyles } from '@ellucian/react-design-system/core/styles';
-import { Button, TextField, List, ListItem, Grid, Typography, TextLink } from '@ellucian/react-design-system/core';
+import { Button, TextField, List, ListItemText, ListItemButton, ListItem, Grid, Typography, TextLink } from '@ellucian/react-design-system/core';
 import PropTypes from 'prop-types';
-
-const styles = () => ({
-  card: {
-      marginTop: 0,
-      marginRight: 0,
-      marginBottom: 0,
-      marginLeft: 0
-  }
+import { spacing60 } from '@ellucian/react-design-system/core/styles/tokens';
+const styles = theme => ({
+  root: {
+      backgroundColor: theme.palette.background.paper
+    },
+  listArea: {
+      backgroundColor: theme.palette.grey['200'],
+      maxWidth: theme.spacing(100),
+      minWidth: theme.spacing(50),
+      padding: spacing60
+    }
 });
+
+
 function FormList(props) {
   const {setFormList} = props;
   const [newForm, setNewForm] = useState()
@@ -32,19 +37,23 @@ function FormList(props) {
         url: formURL } ])
     }
   }
-
   const handleDeleteValue = (index) => {
-    setNewForm([...newForm.slice(0, index), ...newForm.slice(index + 1)])
+    if (Array.isArray(newForm)) {
+      setNewForm([...newForm.slice(0, index), ...newForm.slice(index + 1)])
+    } else {
+      setNewForm(null)
+    }
   };
 
   return (
-    <Grid container direction="column" justifyContent="space-evenly" alignItems="stretch">
+    <Grid container direction="column" justifyContent="space-between" alignItems="stretch" >
       <Grid item><Typography>Add Form</Typography></Grid>
-      <Grid item direction="row" justifyContent="space-evenly" alignItems="stretch">
+      <Grid container direction="row" justifyContent="space-evenly" alignItems="flex-start" >
         <TextField item
           value={formURL}
           onChange={(e) => setFormURL(e.target.value)}
-          label= "URL of Form" />
+          label= "URL of Form"
+          />
         <TextField item
           value={formLabel}
           onChange={(e) => setFormLabel(e.target.value)}
@@ -52,28 +61,25 @@ function FormList(props) {
         <Button item onClick={handleAddValue}>Add Value</Button>
       </Grid>
 
-      <Grid container direction="column" justifyContent="center" alignItems="center" >
+      <List component="nav">
       {Array.isArray(newForm)
       ? newForm.map( (value, index) => (
-          <Grid item key={index}>
-            <TextLink
-            id= {value.label + "-TextLink" }
-            target="_blank"
-            href={value.url} >
-            {value.label}
-            </TextLink>
-            <Button onClick={() => handleDeleteValue(index)}>Delete</Button>
-          </Grid>
+        <ListItem key={index}>
+          <ListItemButton id="hover" href={value.url} target="_blank">
+            <ListItemText primary={value.label} id= {value.label + "-FormLink" }/>
+          </ListItemButton >
+          <Button onClick={() => handleDeleteValue(index)}>Delete</Button>
+        </ListItem>
         ) )
       : typeof newForm === "object"
-      ? <TextLink
-          id= {newForm.label + "-TextLink" }
-          target="_blank"
-          href={newForm.url} >
-          {newForm.label}
-        </TextLink> : null
+      ? <ListItem>
+          <ListItemButton id="hover" href={newForm.url} target="_blank">
+            <ListItemText primary={newForm.label} id= {newForm.label + "-FormLink" }/>
+          </ListItemButton >
+          {/* <Button onClick={() => handleDeleteValue(0)}>Delete</Button> */}
+        </ListItem> : <Typography>No Forms!</Typography>
       }
-      </Grid>
+      </List>
     </Grid>
   )
 }

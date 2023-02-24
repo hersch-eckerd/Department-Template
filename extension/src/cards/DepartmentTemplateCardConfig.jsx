@@ -15,31 +15,32 @@ const DepartmentTemplateCardConfig = (props) => {
             }
         }
     } = props;
-    const [settings, setSettings] = useState(customConfiguration ? customConfiguration.client : {
+    const [cardInfo, setCardInfo] = useState(customConfiguration ? customConfiguration.client : {
         title: '',
         summary: '',
         dirBool: false,
         blog: false
     })
-    const [formList, setFormList] = useState([])
+    const [formList, setFormList] = useState(customConfiguration ? customConfiguration.client.formList : [])
 
     useEffect(() => {
         setCustomConfiguration({
             customConfiguration: {
-                client: {settings, formList}
+                client: {cardInfo, formList}
             }
         })
-    }, [settings, formList])
+    }, [cardInfo, formList])
 
     const handleChange = (tabLabel, e) => {
-        setSettings({
-            ...settings,
+        setCardInfo({
+            ...cardInfo,
             [tabLabel]: e.target.value
          })
     }
     const handleSwitch = name => event => {
-        setSettings({
-            ...settings,
+        const {checked} = event.target
+        setCardInfo({
+            ...cardInfo,
             [name]: event.target.checked
         })
     }
@@ -48,23 +49,24 @@ const DepartmentTemplateCardConfig = (props) => {
     }
 
     return (
-        <Grid container direction="column" justifyContent="space-around" alignItems="flex-start" >
-            <Grid item >
+        <Grid  >
+            <Grid container direction="column" justifyContent="space-between" alignItems="flex-start"  >
                 <TextField
                     label= "Title of Organization"
                     margin="normal"
                     onBlur={handleBlur}
                     onChange={(e) => handleChange("title", e)}
                     placeholder="ITS"
-                    value={settings.title}
+                    value={cardInfo.title}
                 />
                 <TextField
                     label="Summary of Organization"
                     margin="normal"
+                    multiline
                     onBlur={handleBlur}
                     onChange={(e) => handleChange("summary", e)}
                     placeholder="Lorem Ipsum"
-                    value={settings.summary}
+                    value={cardInfo.summary}
                 />
             </Grid>
             <FormControl component="fieldset">
@@ -76,9 +78,9 @@ const DepartmentTemplateCardConfig = (props) => {
                         control={
                             <Switch
                                 id={`blogSwitch`}
-                                checked={settings.blog}
+                                checked={cardInfo.blog}
                                 onChange={handleSwitch("blog")}
-                                value="blog"
+                                value={cardInfo.blog}
                             />
                         }
                         label="Show Blog?"
@@ -87,16 +89,16 @@ const DepartmentTemplateCardConfig = (props) => {
                         control={
                             <Switch
                                 id={`dirBool`}
-                                checked={settings.dirBool}
+                                checked={cardInfo.dirBool}
                                 onChange={handleSwitch("dirBool")}
-                                value="dirBool"
+                                value={cardInfo.dirBool}
                             />
                         }
                         label="Show Directory?"
                     />
                 </FormGroup>
             </FormControl>
-            <Grid item><FormList setFormList={setFormList} /></Grid>
+            <FormList setFormList={setFormList} />
         </Grid>
     );
 };

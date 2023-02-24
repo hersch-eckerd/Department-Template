@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { withStyles } from '@ellucian/react-design-system/core/styles';
 import { spacing40 } from '@ellucian/react-design-system/core/styles/tokens';
 import { Typography, Tabs, Tab, TabLayout, TextLink, TabLayoutContent, Grid } from '@ellucian/react-design-system/core';
@@ -18,15 +18,18 @@ const styles = () => ({
 
 const DepartmentTemplateCard = (props) => {
     const { classes } = props;
-    const { configuration: { customConfiguration:  {settings, formList} }} = useCardInfo();
+    const { configuration: { customConfiguration }} = useCardInfo();
+    const [cardInfo, setCardInfo] = useState(customConfiguration ? customConfiguration.cardInfo : {
+        title: 'Default Title',
+        summary: 'Default Summary',
+        dirBool: null,
+        blog: null
+    })
+    const { title, summary, dirBool, blog } = cardInfo;
 
-    const title = settings ? settings.title : "Title";
-    const summary = settings ? settings.summary : "Summary";
-    const dirBool = settings ? settings.dirBool : 0;
-    const blog = settings ? settings.blog : false;
-    const forms = formList ? formList : [];
+    const forms = customConfiguration ? customConfiguration.formList : null;
     const [value, setValue] = useState({
-        index: '0',
+        index: 0,
         text: 'default'
     });
 
@@ -52,17 +55,17 @@ const DepartmentTemplateCard = (props) => {
                 </Tabs>
                 <TabLayoutContent>
                     <Typography>Content for tab <strong>{value.text}</strong></Typography>
-                    {forms != null && forms.map((value, index) => (
+                    {Array.isArray(forms) && forms.map((value, index) => (
                         <TextLink key={index}
                             id= {value.label + "-TextLink" }
                             target="_blank"
                             href={value.url} >
                             {value.label}
-                      </TextLink>
+                        </TextLink>
                     ))}
-                    {value.index == '0' && <Typography variant='caption'> {summary} </Typography>}
-                    {value.index == '1' && value.text}
-                    {value.index == '2' && value.text}
+                    {value.index == 0 && <Typography variant='caption'> {summary} </Typography>}
+                    {value.index == 1 && value.text}
+                    {value.index == 2 && value.text}
                 </TabLayoutContent>
             </TabLayout>
         </Grid>
