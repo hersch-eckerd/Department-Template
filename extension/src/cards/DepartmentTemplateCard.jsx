@@ -30,9 +30,6 @@ const DepartmentTemplateCard = (props) => {
         text: 'default'
     });
 
-    console.log(formList)
-    console.log(settings)
-
     return (
         <Grid>
             <Typography variant="h2"> {title} </Typography>
