@@ -53,12 +53,12 @@ const DepartmentTemplateCard = (props) => {
                     <Tab id={`SeeMore`} label="See More" />
                 </Tabs>
                 <TabLayoutContent>
-                    <Typography>Forms</Typography>
+                    <Typography variant="h2">Forms: </Typography>
                     {Array.isArray(forms) ? forms.map((value, index) => (
                         <TextLink key={index}
                             id= {value.label + "-TextLink" }
                             target="_blank"
-                            href={value.url} >
+                            >
                             {value.label}
                         </TextLink>
                     )) : <Typography> No Forms </Typography>}
@@ -66,7 +66,7 @@ const DepartmentTemplateCard = (props) => {
                     <Typography>Blog</Typography>
                     <Blog />
                     {value.index == 0 && <Typography variant='caption'> {cardInfo.summary} </Typography>}
-                    {value.index == 2 && value.text}
+                    {value.index == 1 && value.text}
                 </TabLayoutContent>
             </TabLayout>
         </Grid>

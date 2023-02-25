@@ -52,20 +52,20 @@ const DepartmentTemplateCardConfig = (props) => {
     return (
         <Grid container direction="column" justifyContent="space-between" alignItems="flex-start">
             <TextField
-                label= "Title of Organization"
+                label= "Title"
                 margin="normal"
                 onBlur={handleBlur}
                 onChange={(e) => handleChange("title", e)}
-                placeholder="ITS"
+                placeholder="Title of Organization"
                 value={cardInfo.title}
             />
             <TextField
-                label="Summary of Organization"
+                label="Summary"
                 margin="normal"
                 multiline
                 onBlur={handleBlur}
                 onChange={(e) => handleChange("summary", e)}
-                placeholder="Lorem Ipsum"
+                placeholder="Summary of Organization"
                 value={cardInfo.summary}
             />
             <FormControl component="fieldset">
