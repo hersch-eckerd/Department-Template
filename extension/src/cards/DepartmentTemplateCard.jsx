@@ -4,6 +4,7 @@ import { withStyles } from '@ellucian/react-design-system/core/styles';
 import { spacing40 } from '@ellucian/react-design-system/core/styles/tokens';
 import { Typography, Tabs, Tab, TabLayout, TextLink, TabLayoutContent, Grid } from '@ellucian/react-design-system/core';
 // import Directory from "../components/Directory";
+import Blog from "../components/Blog.jsx";
 import { useCardInfo } from '@ellucian/experience-extension/extension-utilities';
 
 
@@ -25,8 +26,6 @@ const DepartmentTemplateCard = (props) => {
         dirBool: null,
         blog: null
     })
-    const { title, summary, dirBool, blog } = cardInfo;
-
     const forms = customConfiguration ? customConfiguration.formList : null;
     const [value, setValue] = useState({
         index: 0,
@@ -35,7 +34,7 @@ const DepartmentTemplateCard = (props) => {
 
     return (
         <Grid>
-            <Typography variant="h2"> {title} </Typography>
+            <Typography variant="h2"> {cardInfo.title} </Typography>
             <TabLayout>
                 <Tabs
                     id={"Tabs"}
@@ -48,23 +47,25 @@ const DepartmentTemplateCard = (props) => {
                     scrollButtons>
 
                     <Tab id={`Summary`} label="Summary" />
-                    {dirBool && <Tab id={`Directory`} label="Directory" />}
-                    {blog && <Tab id={`Blog`} label="Blog" />}
+                    <Tab id={`Directory`} label="Directory" />
+                    <Tab id={`Blog`} label="Blog" />
                     <Tab id={`Forms`} label="Forms" />
                     <Tab id={`SeeMore`} label="See More" />
                 </Tabs>
                 <TabLayoutContent>
-                    <Typography>Content for tab <strong>{value.text}</strong></Typography>
-                    {Array.isArray(forms) && forms.map((value, index) => (
+                    <Typography>Forms</Typography>
+                    {Array.isArray(forms) ? forms.map((value, index) => (
                         <TextLink key={index}
                             id= {value.label + "-TextLink" }
                             target="_blank"
                             href={value.url} >
                             {value.label}
                         </TextLink>
-                    ))}
-                    {value.index == 0 && <Typography variant='caption'> {summary} </Typography>}
-                    {value.index == 1 && value.text}
+                    )) : <Typography> No Forms </Typography>}
+
+                    <Typography>Blog</Typography>
+                    <Blog />
+                    {value.index == 0 && <Typography variant='caption'> {cardInfo.summary} </Typography>}
                     {value.index == 2 && value.text}
                 </TabLayoutContent>
             </TabLayout>

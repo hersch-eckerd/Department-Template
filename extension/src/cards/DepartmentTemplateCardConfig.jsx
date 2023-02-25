@@ -19,9 +19,10 @@ const DepartmentTemplateCardConfig = (props) => {
         title: '',
         summary: '',
         dirBool: false,
-        blog: false
+        blog: false,
+        blogEmail: ''
     })
-    const [formList, setFormList] = useState(customConfiguration ? customConfiguration.client.formList : [])
+    const [formList, setFormList] = useState(null)
 
     useEffect(() => {
         setCustomConfiguration({
@@ -41,7 +42,7 @@ const DepartmentTemplateCardConfig = (props) => {
         const {checked} = event.target
         setCardInfo({
             ...cardInfo,
-            [name]: event.target.checked
+            [name]: checked
         })
     }
     const handleBlur = e => {
@@ -49,26 +50,24 @@ const DepartmentTemplateCardConfig = (props) => {
     }
 
     return (
-        <Grid  >
-            <Grid container direction="column" justifyContent="space-between" alignItems="flex-start"  >
-                <TextField
-                    label= "Title of Organization"
-                    margin="normal"
-                    onBlur={handleBlur}
-                    onChange={(e) => handleChange("title", e)}
-                    placeholder="ITS"
-                    value={cardInfo.title}
-                />
-                <TextField
-                    label="Summary of Organization"
-                    margin="normal"
-                    multiline
-                    onBlur={handleBlur}
-                    onChange={(e) => handleChange("summary", e)}
-                    placeholder="Lorem Ipsum"
-                    value={cardInfo.summary}
-                />
-            </Grid>
+        <Grid container direction="column" justifyContent="space-between" alignItems="flex-start">
+            <TextField
+                label= "Title of Organization"
+                margin="normal"
+                onBlur={handleBlur}
+                onChange={(e) => handleChange("title", e)}
+                placeholder="ITS"
+                value={cardInfo.title}
+            />
+            <TextField
+                label="Summary of Organization"
+                margin="normal"
+                multiline
+                onBlur={handleBlur}
+                onChange={(e) => handleChange("summary", e)}
+                placeholder="Lorem Ipsum"
+                value={cardInfo.summary}
+            />
             <FormControl component="fieldset">
                 <FormLabel component="legend">
                     Card Features
@@ -98,7 +97,15 @@ const DepartmentTemplateCardConfig = (props) => {
                     />
                 </FormGroup>
             </FormControl>
-            <FormList setFormList={setFormList} />
+            <TextField
+                    label= "Email to pull Blogs from"
+                    margin="normal"
+                    onBlur={handleBlur}
+                    onChange={(e) => handleChange("blogEmail", e)}
+                    placeholder="test@eckerd.edu"
+                    value={cardInfo.blogEmail}
+                />
+            <FormList formList = {formList} setFormList={setFormList} />
         </Grid>
     );
 };

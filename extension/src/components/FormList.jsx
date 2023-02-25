@@ -17,76 +17,48 @@ const styles = theme => ({
 
 
 function FormList(props) {
-  const {setFormList} = props;
-  const [newForm, setNewForm] = useState()
+  const {formList, setFormList} = props;
+
   const [formURL, setFormURL] = useState()
   const [formLabel, setFormLabel] = useState()
 
-  useEffect(() => {
-    setFormList(newForm)
-  }, [newForm] )
-
   const handleAddValue = () => {
-    if (Array.isArray(newForm)) {
-      setNewForm(newForm => [...newForm, {
-        label: formLabel,
-        url: formURL } ])
-    } else {
-      setNewForm([ {
-        label: formLabel,
-        url: formURL } ])
+    if (formList === null) {
+      setFormList([{url: formURL, label: formLabel}])
+    } else if (Array.isArray(formList)) {
+      setFormList([...formList, {url: formURL, label: formLabel}])
     }
   }
   const handleDeleteValue = (index) => {
-    if (Array.isArray(newForm)) {
-      setNewForm([...newForm.slice(0, index), ...newForm.slice(index + 1)])
+    if (Array.isArray(formList)) {
+      setFormList([...formList.slice(0, index), ...formList.slice(index + 1)])
     } else {
-      setNewForm(null)
+      setFormList(null)
     }
   };
 
   return (
     <Grid container direction="column" justifyContent="space-between" alignItems="stretch" >
-      <Grid item><Typography>Add Form</Typography></Grid>
+      <Grid><Typography>Add Form</Typography></Grid>
       <Grid container direction="row" justifyContent="space-evenly" alignItems="flex-start" >
-        <TextField item
+        <TextField
           value={formURL}
           onChange={(e) => setFormURL(e.target.value)}
           label= "URL of Form"
           />
-        <TextField item
+        <TextField
           value={formLabel}
           onChange={(e) => setFormLabel(e.target.value)}
           label= "Label of Form" />
-        <Button item onClick={handleAddValue}>Add Value</Button>
+        <Button onClick={handleAddValue}>Add Value</Button>
       </Grid>
-
-      <List component="nav">
-      {Array.isArray(newForm)
-      ? newForm.map( (value, index) => (
-        <ListItem key={index}>
-          <ListItemButton id="hover" href={value.url} target="_blank">
-            <ListItemText primary={value.label} id= {value.label + "-FormLink" }/>
-          </ListItemButton >
-          <Button onClick={() => handleDeleteValue(index)}>Delete</Button>
-        </ListItem>
-        ) )
-      : typeof newForm === "object"
-      ? <ListItem>
-          <ListItemButton id="hover" href={newForm.url} target="_blank">
-            <ListItemText primary={newForm.label} id= {newForm.label + "-FormLink" }/>
-          </ListItemButton >
-          {/* <Button onClick={() => handleDeleteValue(0)}>Delete</Button> */}
-        </ListItem> : <Typography>No Forms!</Typography>
-      }
-      </List>
     </Grid>
   )
 }
 
 FormList.propTypes = {
   setFormList: PropTypes.func,
-  formList: PropTypes.object
+  formList: PropTypes.array
 };
 
 export default withStyles(styles)(FormList)

@@ -1,4 +1,5 @@
 import { withStyles } from '@ellucian/react-design-system/core/styles';
+import axios from 'axios';
 import { spacing40 } from '@ellucian/react-design-system/core/styles/tokens';
 import { Typography, Tabs, Tab, TabLayout, TabLayoutContent, List, ListItem } from '@ellucian/react-design-system/core';
 import { useCardInfo, useData } from '@ellucian/experience-extension/extension-utilities';
@@ -14,27 +15,30 @@ const styles = () => ({
         marginLeft: spacing40
     }
 });
-
 const Blog = () => {
-    const context = {};
     const {configuration : {customConfiguration}} = useCardInfo();
+    const blogEmail = customConfiguration ? customConfiguration.cardInfo.blogEmail : null;
+    // gets posts from wordpress based on user email
+    const [posts, setPosts] = useState([]);
     useEffect(() => {
-        // axios
-    })
-
-    const [list, setList] = useState();
-
-    useEffect(() => {
-        console.log("Blog effect loaded: code group = " );
-    }, []);
-
-    /* if (list != null) {list.map(person => {
-        <ListItem>
-            <ListItemText />
-        </ListItem>
-    })} */
-
-    return <Typography>test</Typography>
+        axios.get(`https://wordpress.ban.eckerd.edu/wp-json/wp/v2/posts?author_email=${blogEmail}`)
+        .then(response => {
+            setPosts(response.data);
+        })
+        .catch(error => {
+            console.log(error);
+        });
+    }, [blogEmail]);
+    return (
+        <div>
+        {posts.map(post => (
+            <div key={post.id}>
+            <h2>{post.title.rendered}</h2>
+            <div dangerouslySetInnerHTML={{ __html: post.content.rendered }} />
+            </div>
+        ))}
+        </div>
+    );
 };
 
 Blog.propTypes = {
@@ -42,5 +46,3 @@ Blog.propTypes = {
 };
 
 export default withStyles(styles)(Blog);
-
-https://wordpress.ban.eckerd.edu/wp-json/wp/v2/posts
