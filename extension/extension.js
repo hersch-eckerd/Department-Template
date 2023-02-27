@@ -16,9 +16,7 @@ module.exports = {
             "source": "./src/cards/DepartmentTemplateCardConfig.jsx"
         },
         "pageRoute": {
-            "route":"/",
-            "excludeClickSelectors": ['*']
-        }
+            "route":"/"        }
     }],
     "page": {
         "source": "./src/page/router.jsx"
