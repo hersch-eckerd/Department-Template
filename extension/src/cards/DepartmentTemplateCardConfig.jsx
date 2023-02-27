@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
-import { TextField, Grid, Switch, FormControlLabel, FormControl, FormGroup, FormLabel, FormHelperText } from '@ellucian/react-design-system/core';
-import FormList from '../components/FormList.jsx';
+import { TextField, Grid, Switch, FormControlLabel, FormControl, FormGroup, FormLabel, List, ListItem, ListItemText, FormHelperText } from '@ellucian/react-design-system/core';
+import Forms from '../components/Forms.jsx';
 
 const DepartmentTemplateCardConfig = (props) => {
     const {
@@ -15,34 +15,47 @@ const DepartmentTemplateCardConfig = (props) => {
             }
         }
     } = props;
-    const [cardInfo, setCardInfo] = useState(customConfiguration ? customConfiguration.client : {
+    const [cardSettings, setCardSettings] = useState(customConfiguration ? customConfiguration.cardSettings : {
         title: '',
         summary: '',
         dirBool: false,
         blog: false,
-        blogEmail: ''
+        blogEmail: '',
+        formList: [{
+            label: '',
+            url: '',
+            type: ''
+        }]
     })
-    const [formList, setFormList] = useState(null)
 
     useEffect(() => {
         setCustomConfiguration({
             customConfiguration: {
-                client: {cardInfo, formList}
+                client: {cardSettings}
             }
         })
-    }, [cardInfo, formList])
+    }, [cardSettings])
 
+    const handleAddForm = (paramL, paramU, paramT) => {
+        setCardSettings({
+            ...cardSettings,
+            formList: [...cardSettings.formList, {
+                label: paramL,
+                url: paramU,
+                type: paramT
+            }]
+        })
+    }
     const handleChange = (tabLabel, e) => {
-        setCardInfo({
-            ...cardInfo,
+        setCardSettings({
+            ...cardSettings,
             [tabLabel]: e.target.value
-         })
+        })
     }
     const handleSwitch = name => event => {
-        const {checked} = event.target
-        setCardInfo({
-            ...cardInfo,
-            [name]: checked
+        setCardSettings({
+            ...cardSettings,
+            [name]: event.target.checked
         })
     }
     const handleBlur = e => {
@@ -56,8 +69,8 @@ const DepartmentTemplateCardConfig = (props) => {
                 margin="normal"
                 onBlur={handleBlur}
                 onChange={(e) => handleChange("title", e)}
-                placeholder="Title of Organization"
-                value={cardInfo.title}
+                placeholder="ITS"
+                value={cardSettings.title}
             />
             <TextField
                 label="Summary"
@@ -65,7 +78,7 @@ const DepartmentTemplateCardConfig = (props) => {
                 multiline
                 onBlur={handleBlur}
                 onChange={(e) => handleChange("summary", e)}
-                placeholder="Summary of Organization"
+                placeholder="Lorem Ipsum"
                 value={cardInfo.summary}
             />
             <FormControl component="fieldset">
@@ -77,9 +90,9 @@ const DepartmentTemplateCardConfig = (props) => {
                         control={
                             <Switch
                                 id={`blogSwitch`}
-                                checked={cardInfo.blog}
+                                checked={cardSettings.blog}
                                 onChange={handleSwitch("blog")}
-                                value={cardInfo.blog}
+                                value={cardSettings.blog}
                             />
                         }
                         label="Show Blog?"
@@ -88,9 +101,9 @@ const DepartmentTemplateCardConfig = (props) => {
                         control={
                             <Switch
                                 id={`dirBool`}
-                                checked={cardInfo.dirBool}
+                                checked={cardSettings.dirBool}
                                 onChange={handleSwitch("dirBool")}
-                                value={cardInfo.dirBool}
+                                value={cardSettings.dirBool}
                             />
                         }
                         label="Show Directory?"
@@ -98,14 +111,24 @@ const DepartmentTemplateCardConfig = (props) => {
                 </FormGroup>
             </FormControl>
             <TextField
-                    label= "Email to pull Blogs from"
-                    margin="normal"
-                    onBlur={handleBlur}
-                    onChange={(e) => handleChange("blogEmail", e)}
-                    placeholder="test@eckerd.edu"
-                    value={cardInfo.blogEmail}
-                />
-            <FormList formList = {formList} setFormList={setFormList} />
+                label= "Email to pull Blogs from"
+                margin="normal"
+                onBlur={handleBlur}
+                onChange={(e) => handleChange("blogEmail", e)}
+                placeholder="test@eckerd.edu"
+                value={cardSettings.blogEmail}
+            />
+            <Forms formList={cardSettings.formList} setFormList={handleAddForm} />
+            <List>
+            {cardSettings.formList && cardSettings.formList.length !== '0' && cardSettings.formList.map((form, index) => {
+                return (
+                    <ListItem key={index}>
+                      <ListItemText primary={form.label} />
+                    </ListItem>
+                    )
+                })
+            }
+            </List>
         </Grid>
     );
 };

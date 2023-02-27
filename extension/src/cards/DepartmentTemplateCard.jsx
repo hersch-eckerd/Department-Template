@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { withStyles } from '@ellucian/react-design-system/core/styles';
 import { spacing40 } from '@ellucian/react-design-system/core/styles/tokens';
-import { Typography, Tabs, Tab, TabLayout, TextLink, TabLayoutContent, Grid } from '@ellucian/react-design-system/core';
+import { Typography, Tabs, Tab, List, ListItemButton, ListItemText, TabLayout, TextLink, TabLayoutContent, Grid } from '@ellucian/react-design-system/core';
 // import Directory from "../components/Directory";
 import Blog from "../components/Blog.jsx";
 import { useCardInfo } from '@ellucian/experience-extension/extension-utilities';
@@ -20,13 +20,14 @@ const styles = () => ({
 const DepartmentTemplateCard = (props) => {
     const { classes } = props;
     const { configuration: { customConfiguration }} = useCardInfo();
-    const [cardInfo, setCardInfo] = useState(customConfiguration ? customConfiguration.cardInfo : {
+    const [cardSettings, setCardInfo] = useState(customConfiguration ? customConfiguration.cardSettings : {
         title: 'Default Title',
         summary: 'Default Summary',
         dirBool: null,
-        blog: null
+        blog: null,
+        forms: []
     })
-    const forms = customConfiguration ? customConfiguration.formList : null;
+
     const [value, setValue] = useState({
         index: 0,
         text: 'default'
@@ -34,7 +35,7 @@ const DepartmentTemplateCard = (props) => {
 
     return (
         <Grid>
-            <Typography variant="h2"> {cardInfo.title} </Typography>
+            <Typography variant="h2"> {cardSettings.title} </Typography>
             <TabLayout>
                 <Tabs
                     id={"Tabs"}
@@ -53,20 +54,24 @@ const DepartmentTemplateCard = (props) => {
                     <Tab id={`SeeMore`} label="See More" />
                 </Tabs>
                 <TabLayoutContent>
-                    <Typography variant="h2">Forms: </Typography>
-                    {Array.isArray(forms) ? forms.map((value, index) => (
-                        <TextLink key={index}
-                            id= {value.label + "-TextLink" }
-                            target="_blank"
-                            >
-                            {value.label}
-                        </TextLink>
-                    )) : <Typography> No Forms </Typography>}
+                    <Typography>Forms</Typography>
+                    {Array.isArray(cardSettings.forms)
+                    ? <List>
+                        {cardSettings.forms.length !== '0' && cardSettings.forms.map((value, index) => (
+                            <ListItemButton
+                                key={index}
+                                component="a"
+                                id= {value.label + "-TextLink" }
+                                target="_blank" >
+                                <ListItemText>{value.label}</ListItemText>
+                            </ListItemButton>
+                        ))}
+                    </List> : <Typography> No Forms </Typography>}
 
                     <Typography>Blog</Typography>
                     <Blog />
-                    {value.index == 0 && <Typography variant='caption'> {cardInfo.summary} </Typography>}
-                    {value.index == 1 && value.text}
+                    {value.index == 0 && <Typography variant='caption'> {cardSettings.summary} </Typography>}
+                    {value.index == 2 && value.text}
                 </TabLayoutContent>
             </TabLayout>
         </Grid>

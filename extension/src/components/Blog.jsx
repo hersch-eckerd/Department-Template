@@ -1,7 +1,7 @@
 import { withStyles } from '@ellucian/react-design-system/core/styles';
 import axios from 'axios';
 import { spacing40 } from '@ellucian/react-design-system/core/styles/tokens';
-import { Typography, Tabs, Tab, TabLayout, TabLayoutContent, TextLink,  List, ListItem } from '@ellucian/react-design-system/core';
+import { Typography, Tabs, Tab, TabLayout, TabLayoutContent, List, ListItem, TextLink } from '@ellucian/react-design-system/core';
 import { useCardInfo, useData } from '@ellucian/experience-extension/extension-utilities';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
@@ -17,7 +17,7 @@ const styles = () => ({
 });
 const Blog = () => {
     const {configuration : {customConfiguration}} = useCardInfo();
-    const blogEmail = customConfiguration ? customConfiguration.cardInfo.blogEmail : null;
+    const blogEmail = customConfiguration ? customConfiguration.cardSettings.blogEmail : '';
     // gets posts from wordpress based on user email
     const [posts, setPosts] = useState([]);
     useEffect(() => {
@@ -29,15 +29,16 @@ const Blog = () => {
         })
         .catch(error => {
             console.log(error);
+            setPosts([]);
         });
     }, [blogEmail]);
     return (
         <List>
         {posts.map(post => (
-            <ListItem key={post.id}>
-                <Typography>{post.title.rendered}</Typography>
-                {/* <div dangerouslySetInnerHTML={{ __html: post.content.rendered }} /> */}
-            </ListItem>
+            <div key={post.id}>
+            <h2>{post.title.rendered}</h2>
+            <div dangerouslySetInnerHTML={{ __html: post.content.rendered }} />
+            </div>
         ))}
         </List>
     );
