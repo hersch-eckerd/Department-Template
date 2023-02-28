@@ -5,6 +5,7 @@ import { spacing40 } from '@ellucian/react-design-system/core/styles/tokens';
 import { Typography, Tabs, Tab, List, ListItem, ListItemText, TabLayout, TextLink, TabLayoutContent, Grid } from '@ellucian/react-design-system/core';
 // import Directory from "../components/Directory";
 import Blog from "../components/Blog.jsx";
+import FormList from "../components/FormList.jsx";
 import { useCardInfo } from '@ellucian/experience-extension/extension-utilities';
 
 
@@ -46,15 +47,7 @@ const DepartmentTemplateCard = (props) => {
                 </Tabs>
                 <TabLayoutContent>
                     <Typography variant="h4">Forms</Typography>
-                    {Array.isArray(formList)
-                    ? <List>
-                        {formList && formList.length !== '0' &&  formList.map((value, index) => (
-                        <ListItem button href={value.url} key={index}>
-                            <ListItemText primary={value.label} />
-                        </ListItem>
-                        ))}
-                    </List> : <Typography> No Forms </Typography>}
-                    <Blog />
+                    <FormList />
                     {value.index == 0 && <Typography variant='caption'> {summary} </Typography> }
                     {value.index == 1 && <Blog /> }
                     {value.index == 2 && value.text}
