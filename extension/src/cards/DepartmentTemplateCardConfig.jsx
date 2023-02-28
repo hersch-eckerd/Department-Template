@@ -37,8 +37,10 @@ const DepartmentTemplateCardConfig = (props) => {
         dirBool: false,
         blogBool: false,
         formBool: false,
-        blogEmail: '',
         smBool: false,
+        dirCode: '',
+        blogEmail: '',
+        smLink: '',
         formList: []
     })
     console.log(customConfiguration)
@@ -133,6 +135,14 @@ const DepartmentTemplateCardConfig = (props) => {
                     />
                 </FormGroup>
             </FormControl>
+            {cardSettings.dirBool == true && <TextField
+                label= "Banner Code from crosswalk-rules to sync groups with"
+                className={classes.input}
+                onBlur={handleBlur}
+                onChange={(e) => handleChange("dirCode", e)}
+                placeholder="HR-FULL-TIME"
+                value={cardSettings.dirCode}
+            />}
             {cardSettings.blogBool == true && <TextField
                 label= "Email to pull blog posts from"
                 className={classes.input}
@@ -140,6 +150,14 @@ const DepartmentTemplateCardConfig = (props) => {
                 onChange={(e) => handleChange("blogEmail", e)}
                 placeholder="test@eckerd.edu"
                 value={cardSettings.blogEmail}
+            />}
+            {cardSettings.smBool == true && <TextField
+                label= "See More Link"
+                className={classes.input}
+                onBlur={handleBlur}
+                onChange={(e) => handleChange("smLink", e)}
+                placeholder="https://www.eckerd.edu"
+                value={cardSettings.smLink}
             />}
             <Forms formList={cardSettings.formList} setFormList={handleAddForm} />
             <FormView formList={cardSettings.formList} />
