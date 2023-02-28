@@ -16,10 +16,7 @@ const styles = () => ({
 });
 
 const Directory = () => {
-    const context = {};
     const {configuration : {customConfiguration}} = useCardInfo();
-
-
     const [list, setList] = useState();
 
     useEffect(() => {
