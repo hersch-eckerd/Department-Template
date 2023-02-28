@@ -24,7 +24,6 @@ const Blog = () => {
         console.log("blog email is " + blogEmail)
         axios.get(`https://wordpress.ban.eckerd.edu/wp-json/wp/v2/posts?author_email=${blogEmail}`)
         .then(response => {
-            console.log("reponse is: " + response.data)
             setPosts(response.data);
         })
         .catch(error => {
@@ -36,8 +35,8 @@ const Blog = () => {
         <List>
         {posts.map(post => (
             <div key={post.id}>
-            <h2>{post.title.rendered}</h2>
-            <div dangerouslySetInnerHTML={{ __html: post.content.rendered }} />
+                <h2>{post.title.rendered}</h2>
+                <div dangerouslySetInnerHTML={{ __html: post.content.rendered }} />
             </div>
         ))}
         </List>

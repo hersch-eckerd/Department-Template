@@ -7,26 +7,24 @@ const styles = theme => ({
   root: {
       backgroundColor: theme.palette.background.paper
     },
-  listArea: {
-      backgroundColor: theme.palette.grey['200'],
-      maxWidth: theme.spacing(100),
-      minWidth: theme.spacing(50),
-      padding: spacing60
+    forms: {
+      marginTop: spacing60,
+      marginBottom: spacing60
+    },
+    input: {
+      marginRight: 20,
+      marginLeft: 20
     }
+
 });
 
-function Forms({formList, setFormList}) {
-
+function Forms({formList, setFormList, classes}) {
   const [url, setUrl] = useState('')
   const [label, setLabel] = useState('')
   const [type, setType] = useState('Student');
 
-  const handleSubmit = (event) => {
-    setFormList([
-      ...formList,
-      [url, label, type]
-      ]);
-    console.log(formList)
+  const handleSubmit = () => {
+    setFormList({url, label, type})
     setUrl('');
     setLabel('');
     setType('Student');
@@ -40,31 +38,39 @@ function Forms({formList, setFormList}) {
     if (Array.isArray(formList.formList)) {
       setFormList([...formList.formList.slice(0, index), ...formList.formList.slice(index + 1)])
     } else {
-      setFormList(null)
+      setFormList([])
     }
   };
 
   return (
-    <Grid container direction="column" justifyContent="center" alignItems="center" >
+    <Grid container className={classes.forms} direction="column" justifyContent="space-evenly" alignItems="flex-start" >
       <Typography variant="h3">Add Form</Typography>
-      <Grid container direction="row" justifyContent="space-evenly" alignItems="flex-start" >
+      <Grid item direction="row" justifyContent="space-evenly" alignItems="center" >
         <TextField
+          className={classes.input}
           value={url}
           onChange={(event) => setUrl(event.target.value)}
           label= "URL of Form" />
         <TextField
+          className={classes.input}
           value={label}
           onChange={(event) => setLabel(event.target.value)}
           label= "Label of Form" />
         <SelectionMenu
+          className={classes.input}
           value={type}
           label="Type of Form"
           onChange={(e) => setType(e.target.value)}
         >
           <SelectionMenuItem value="Student">Student</SelectionMenuItem>
           <SelectionMenuItem value="Faculty">Faculty</SelectionMenuItem>
+          <SelectionMenuItem value="Both">Both</SelectionMenuItem>
         </SelectionMenu>
-        <Button onClick={handleSubmit}>Add Value</Button>
+        <Button
+          className={classes.input}
+          onClick={handleSubmit} >
+            Add Value
+        </Button>
       </Grid>
     </Grid>
   )
@@ -72,7 +78,8 @@ function Forms({formList, setFormList}) {
 
 Forms.propTypes = {
   setFormList: PropTypes.func,
-  formList: PropTypes.array
+  formList: PropTypes.array,
+  classes: PropTypes.object.isRequired
 };
 
 export default withStyles(styles)(Forms)

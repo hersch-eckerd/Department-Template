@@ -1,7 +1,23 @@
 import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
+import { withStyles } from '@ellucian/react-design-system/core/styles';
 import { TextField, Grid, Switch, FormControlLabel, FormControl, FormGroup, FormLabel, List, ListItem, ListItemText, FormHelperText } from '@ellucian/react-design-system/core';
 import Forms from '../components/Forms.jsx';
+import { spacing40 } from '@ellucian/react-design-system/core/styles/tokens';
+
+const styles = () => ({
+    card: {
+        height: '100%',
+        marginTop: 40,
+        marginRight: spacing40,
+        marginBottom: 40,
+        marginLeft: spacing40
+    },
+    input: {
+        marginTop: 20,
+        marginBottom: 20
+    }
+});
 
 const DepartmentTemplateCardConfig = (props) => {
     const {
@@ -13,19 +29,14 @@ const DepartmentTemplateCardConfig = (props) => {
             configuration: {
                 customConfiguration
             }
-        }
+        }, classes
     } = props;
     const [cardSettings, setCardSettings] = useState(customConfiguration ? customConfiguration.cardSettings : {
-        title: '',
         summary: '',
         dirBool: false,
         blog: false,
         blogEmail: '',
-        formList: [{
-            label: '',
-            url: '',
-            type: ''
-        }]
+        formList: []
     })
 
     useEffect(() => {
@@ -36,14 +47,10 @@ const DepartmentTemplateCardConfig = (props) => {
         })
     }, [cardSettings])
 
-    const handleAddForm = (paramL, paramU, paramT) => {
+    const handleAddForm = (form) => {
         setCardSettings({
             ...cardSettings,
-            formList: [...cardSettings.formList, {
-                label: paramL,
-                url: paramU,
-                type: paramT
-            }]
+            formList: [...cardSettings.formList, form]
         })
     }
     const handleChange = (tabLabel, e) => {
@@ -63,29 +70,22 @@ const DepartmentTemplateCardConfig = (props) => {
     }
 
     return (
-        <Grid container direction="column" justifyContent="space-between" alignItems="flex-start">
-            <TextField
-                label= "Title"
-                margin="normal"
-                onBlur={handleBlur}
-                onChange={(e) => handleChange("title", e)}
-                placeholder="ITS"
-                value={cardSettings.title}
-            />
+        <Grid className={classes.card} container direction="column" justifyContent="space-between" alignItems="flex-start">
             <TextField
                 label="Summary"
+                className={classes.input}
                 margin="normal"
                 multiline
                 onBlur={handleBlur}
                 onChange={(e) => handleChange("summary", e)}
                 placeholder="Lorem Ipsum"
-                value={cardInfo.summary}
+                value={cardSettings.summary}
             />
-            <FormControl component="fieldset">
+            <FormControl component="fieldset" className={classes.input}>
                 <FormLabel component="legend">
                     Card Features
                 </FormLabel>
-                <FormGroup>
+                <FormGroup >
                     <FormControlLabel
                         control={
                             <Switch
@@ -112,7 +112,7 @@ const DepartmentTemplateCardConfig = (props) => {
             </FormControl>
             <TextField
                 label= "Email to pull Blogs from"
-                margin="normal"
+                className={classes.input}
                 onBlur={handleBlur}
                 onChange={(e) => handleChange("blogEmail", e)}
                 placeholder="test@eckerd.edu"
@@ -122,7 +122,7 @@ const DepartmentTemplateCardConfig = (props) => {
             <List>
             {cardSettings.formList && cardSettings.formList.length !== '0' && cardSettings.formList.map((form, index) => {
                 return (
-                    <ListItem key={index}>
+                    <ListItem button href={form.url} key={index}>
                       <ListItemText primary={form.label} />
                     </ListItem>
                     )
@@ -135,7 +135,8 @@ const DepartmentTemplateCardConfig = (props) => {
 
 DepartmentTemplateCardConfig.propTypes = {
     cardControl: PropTypes.object,
-    cardInfo: PropTypes.object
+    cardInfo: PropTypes.object,
+    classes: PropTypes.object
 };
 
-export default DepartmentTemplateCardConfig;
+export default withStyles(styles)(DepartmentTemplateCardConfig);
