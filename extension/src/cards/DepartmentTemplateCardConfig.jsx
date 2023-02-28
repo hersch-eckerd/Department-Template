@@ -34,8 +34,10 @@ const DepartmentTemplateCardConfig = (props) => {
     const [cardSettings, setCardSettings] = useState(customConfiguration ? customConfiguration.cardSettings : {
         summary: '',
         dirBool: false,
-        blog: false,
+        blogBool: false,
+        formBool: false,
         blogEmail: '',
+        smBool: false,
         formList: []
     })
 
@@ -64,6 +66,7 @@ const DepartmentTemplateCardConfig = (props) => {
             ...cardSettings,
             [name]: event.target.checked
         })
+        console.log(cardSettings)
     }
     const handleBlur = e => {
         setIsCustomConfigurationValid(e.target.value !== '');
@@ -89,17 +92,6 @@ const DepartmentTemplateCardConfig = (props) => {
                     <FormControlLabel
                         control={
                             <Switch
-                                id={`blogSwitch`}
-                                checked={cardSettings.blog}
-                                onChange={handleSwitch("blog")}
-                                value={cardSettings.blog}
-                            />
-                        }
-                        label="Show Blog?"
-                    />
-                    <FormControlLabel
-                        control={
-                            <Switch
                                 id={`dirBool`}
                                 checked={cardSettings.dirBool}
                                 onChange={handleSwitch("dirBool")}
@@ -108,16 +100,49 @@ const DepartmentTemplateCardConfig = (props) => {
                         }
                         label="Show Directory?"
                     />
+                    <FormControlLabel
+                        control={
+                            <Switch
+                                id={`blogBool`}
+                                checked={cardSettings.blogBool}
+                                onChange={handleSwitch("blogBool")}
+                                value={cardSettings.blogBool}
+                            />
+                        }
+                        label="Show Blog?"
+                    />
+                    <FormControlLabel
+                        control={
+                            <Switch
+                                id={`formBool`}
+                                checked={cardSettings.formBool}
+                                onChange={handleSwitch("formBool")}
+                                value={cardSettings.formBool}
+                            />
+                        }
+                        label="Show Forms?"
+                    />
+                    <FormControlLabel
+                        control={
+                            <Switch
+                                id={`smBool`}
+                                checked={cardSettings.smBool}
+                                onChange={handleSwitch("smBool")}
+                                value={cardSettings.smBool}
+                            />
+                        }
+                        label="Show See More Link?"
+                    />
                 </FormGroup>
             </FormControl>
-            <TextField
-                label= "Email to pull Blogs from"
+            {cardSettings.blogBool == true && <TextField
+                label= "Email to pull blog posts from"
                 className={classes.input}
                 onBlur={handleBlur}
                 onChange={(e) => handleChange("blogEmail", e)}
                 placeholder="test@eckerd.edu"
                 value={cardSettings.blogEmail}
-            />
+            />}
             <Forms formList={cardSettings.formList} setFormList={handleAddForm} />
             <List>
             {cardSettings.formList && cardSettings.formList.length !== '0' && cardSettings.formList.map((form, index) => {

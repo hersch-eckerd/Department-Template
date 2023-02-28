@@ -19,20 +19,12 @@ const styles = () => ({
 
 const DepartmentTemplateCard = (props) => {
     const { classes } = props;
-    const { configuration: { customConfiguration }} = useCardInfo();
-    const [cardSettings, setCardSettings] = useState(customConfiguration ? customConfiguration.cardSettings : {
-        summary: '',
-        dirBool: false,
-        blog: false,
-        blogEmail: '',
-        formList: []
-    })
-
+    const { configuration: { customConfiguration: { cardSettings: { summary, dirBool, formBool, blogBool, smBool, formList } } }} = useCardInfo();
     const [value, setValue] = useState({
         index: 0,
         text: 'default'
     });
-    console.log(cardSettings)
+    console.log(summary, dirBool, formBool, blogBool, smBool, formList)
 
     return (
         <Grid>
@@ -45,27 +37,26 @@ const DepartmentTemplateCard = (props) => {
                     })}
                     value={value.index}
                     variant="card"
-                    scrollButtons>
-
+                    scrollButtons >
                     <Tab id={`Summary`} label="Summary" />
-                    <Tab id={`Directory`} label="Directory" />
-                    <Tab id={`Blog`} label="Blog" />
-                    <Tab id={`Forms`} label="Forms" />
-                    <Tab id={`SeeMore`} label="See More" />
+                    {dirBool ? <Tab id={`Directory`} label="Directory" /> : <Tab id={`Directory`} label="Directory" disabled />}
+                    {blogBool ? <Tab id={`Blog`} label="Blog" /> : <Tab id={`Blog`} label="Blog" disabled />}
+                    {formBool ? <Tab id={`Forms`} label="Forms" /> : <Tab id={`Forms`} label="Forms" disabled />}
+                    {smBool ? <Tab id={`SeeMore`} label="See More" /> : <Tab id={`SeeMore`} label="See More" disabled />}
                 </Tabs>
                 <TabLayoutContent>
                     <Typography variant="h4">Forms</Typography>
-                    {Array.isArray(cardSettings.formList)
+                    {Array.isArray(formList)
                     ? <List>
-                        {cardSettings.formList && cardSettings.formList.length !== '0' &&  cardSettings.formList.map((value, index) => (
+                        {formList && formList.length !== '0' &&  formList.map((value, index) => (
                         <ListItem button href={value.url} key={index}>
                             <ListItemText primary={value.label} />
                         </ListItem>
                         ))}
                     </List> : <Typography> No Forms </Typography>}
-                    <Typography>Blog</Typography>
                     <Blog />
-                    {value.index == 0 && <Typography variant='caption'> {cardSettings.summary} </Typography>}
+                    {value.index == 0 && <Typography variant='caption'> {summary} </Typography> }
+                    {value.index == 1 && <Blog /> }
                     {value.index == 2 && value.text}
                 </TabLayoutContent>
             </TabLayout>

@@ -17,7 +17,7 @@ const styles = () => ({
 });
 const Blog = () => {
     const {configuration : {customConfiguration}} = useCardInfo();
-    const blogEmail = customConfiguration ? customConfiguration.cardSettings.blogEmail : '';
+    const blogEmail = customConfiguration ? customConfiguration.cardSettings.blogEmail : 'default';
     // gets posts from wordpress based on user email
     const [posts, setPosts] = useState([]);
     useEffect(() => {
@@ -34,10 +34,12 @@ const Blog = () => {
     return (
         <List>
         {posts.map(post => (
-            <div key={post.id}>
-                <h2>{post.title.rendered}</h2>
+            <ListItem key={post.id}>
+                <TextLink href={post.link}
+                    >{post.title.rendered}
+                </TextLink>
                 <div dangerouslySetInnerHTML={{ __html: post.content.rendered }} />
-            </div>
+            </ListItem>
         ))}
         </List>
     );
