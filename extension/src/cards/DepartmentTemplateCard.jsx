@@ -54,7 +54,8 @@ const DepartmentTemplateCard = (props) => {
                     {smBool ? <Tab id={`SeeMore`} label="See More" /> : <Tab id={`SeeMore`} label="See More" disabled />}
                 </Tabs>
                 <TabLayoutContent>
-                    {value.index == 0 && <Typography variant='caption'> {summary} </Typography> }
+                    {value.index == 0 && <Typography variant='caption'> {summary} </Typography>}
+                    {value.index == 0 && <FormView formList={formList}/> }
                     {value.index == 1 && <Directory /> }
                     {value.index == 2 && <Blog /> }
                     {value.index == 3 && <FormView formList={formList}/>}

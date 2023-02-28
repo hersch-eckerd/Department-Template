@@ -43,8 +43,6 @@ const DepartmentTemplateCardConfig = (props) => {
         smLink: '',
         formList: []
     })
-    console.log(customConfiguration)
-
     useEffect(() => {
         setCustomConfiguration({
             customConfiguration: {
@@ -58,6 +56,19 @@ const DepartmentTemplateCardConfig = (props) => {
             ...cardSettings,
             formList: [...cardSettings.formList, form]
         })
+    }
+    const handleDeleteForm = (form) => {
+        if (form != null) {
+            setCardSettings({
+                ...cardSettings,
+                formList: [form]
+            })
+        } else {
+            setCardSettings({
+                ...cardSettings,
+                formList: []
+            })
+        }
     }
     const handleChange = (tabLabel, e) => {
         setCardSettings({
@@ -75,7 +86,7 @@ const DepartmentTemplateCardConfig = (props) => {
         setIsCustomConfigurationValid(e.target.value !== '');
     }
     return (
-        <Grid className={classes.card} container direction="column" justifyContent="space-between" alignItems="flex-start">
+        <Grid className={classes.card} direction="column" justifyContent="space-between" alignItems="flex-start">
             <TextField
                 label="Summary"
                 className={classes.input}
@@ -159,8 +170,7 @@ const DepartmentTemplateCardConfig = (props) => {
                 placeholder="https://www.eckerd.edu"
                 value={cardSettings.smLink}
             />}
-            <Forms formList={cardSettings.formList} setFormList={handleAddForm} />
-            <FormView formList={cardSettings.formList} />
+            <Forms formList={cardSettings.formList} handleAddForm={handleAddForm} handleDeleteForm={handleDeleteForm} />
         </Grid>
     );
 };
