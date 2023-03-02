@@ -13,15 +13,14 @@ const styles = () => ({
 
 const FormView = ({classes, formList}) => {
     const {roles} = useUserInfo();
-    const [filteredFormList, setFormList] = useState(formList);
-    useEffect(() => {
-        if (!formList) {return}
+    const [filteredList, setFilteredList] = useState(formList);
+    console.log(roles)
+    useEffect( () => {
         const filteredFormList = formList.filter(form =>
-            console.log(form) ||
-            roles.includes(form.role)
-        );
-        setFormList(filteredFormList);
-    }, [formList]);
+            roles.some(role => form.roles.includes(role)));
+        console.log(filteredFormList)
+        setFilteredList(filteredFormList);
+    }, [formList] );
 
     if (!formList || !Array.isArray(formList) || formList.length === 0) {
         return (
@@ -42,7 +41,6 @@ const FormView = ({classes, formList}) => {
         </List>
     )
 }
-
 FormView.propTypes = {
     classes: PropTypes.object.isRequired,
     formList: PropTypes.array.isRequired,
