@@ -34,7 +34,6 @@ function Forms({formList, handleAddForm, handleDeleteForm, classes}) {
     setUrl('');
     setLabel('');
     setRole(roleList.reduce((obj, roleName) => ({...obj, [roleName]: false}), {}));
-    console.log(role)
   };
 
   const handleChange = name => event => {
@@ -43,7 +42,11 @@ function Forms({formList, handleAddForm, handleDeleteForm, classes}) {
 
   const handleDelete = (index) => {
     const newFormList = [...formList];
+    console.log("previous form list:")
+    console.log(newFormList)
     newFormList.splice(index, 1);
+    console.log("index :")
+    console.log(index)
     handleDeleteForm(...newFormList)
   }
   return (

@@ -26,7 +26,17 @@ const Blog = ({classes}) => {
     const {configuration : {customConfiguration}} = useCardInfo();
     const blogEmail = customConfiguration ? customConfiguration.cardSettings.blogEmail : 'default';
     const [posts, setPosts] = useState([]);
-    
+    useEffect(() => {
+        axios.get(`https://wordpress.ban.eckerd.edu/wp-json/wp/v2/posts?author_email=${blogEmail}`)
+        .then(response => {
+            setPosts(response.data);
+        })
+        .catch(error => {
+            console.log(error);
+            setPosts([]);
+        });
+    }, [blogEmail]);
+
     return (
         <List>
         {posts.map(post => (

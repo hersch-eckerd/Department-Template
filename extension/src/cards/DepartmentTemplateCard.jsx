@@ -2,7 +2,8 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { withStyles } from '@ellucian/react-design-system/core/styles';
 import { spacing40 } from '@ellucian/react-design-system/core/styles/tokens';
-import { Typography, Tabs, Tab, List, ListItem, ListItemText, TabLayout, TextLink, TabLayoutContent, Grid } from '@ellucian/react-design-system/core';
+import { Button, Typography, Tabs, Tab, List, ListItem, ListItemText, TabLayout, TextLink, TabLayoutContent, Grid } from '@ellucian/react-design-system/core';
+import { Icon } from '@ellucian/ds-icons/lib';
 import Directory from "../components/Directory";
 import Blog from "../components/Blog.jsx";
 import FormView from "../components/FormView.jsx";
@@ -15,19 +16,27 @@ const styles = () => ({
         marginRight: spacing40,
         marginBottom: 0,
         marginLeft: spacing40
+    },
+    button: {
+        marginTop: spacing40,
+        marginBottom: spacing40
+    },
+    hidden: {
+        display: 'none'
     }
 });
 
 const DepartmentTemplateCard = (props) => {
     const { classes } = props;
     const { configuration: { customConfiguration }} = useCardInfo();
-    const { summary, dirBool, formBool, blogBool, smBool, formList } = customConfiguration ? customConfiguration.cardSettings : {
+    const { summary, dirBool, formBool, blogBool, smBool, smLink, formList } = customConfiguration ? customConfiguration.cardSettings : {
         summary: '',
         dirBool: false,
         blogBool: false,
         formBool: false,
         blogEmail: '',
         smBool: false,
+        smLink: '',
         formList: []
     };
     const [value, setValue] = useState({
@@ -48,13 +57,16 @@ const DepartmentTemplateCard = (props) => {
                     variant="card"
                     scrollButtons >
                     <Tab id={`Summary`} label="Summary" />
-                    {dirBool ? <Tab id={`Directory`} label="Directory" /> : <Tab id={`Directory`} label="Directory" disabled />}
-                    {blogBool ? <Tab id={`Blog`} label="Blog" /> : <Tab id={`Blog`} label="Blog" disabled />}
-                    {formBool ? <Tab id={`Forms`} label="Forms" /> : <Tab id={`Forms`} label="Forms" disabled />}
-                    {smBool ? <Tab id={`SeeMore`} label="See More" /> : <Tab id={`SeeMore`} label="See More" disabled />}
+                    {dirBool ? <Tab id={`Directory`} label="Directory" /> : <Tab id={`Directory`} label="Directory" className={classes.hidden} />}
+                    {blogBool ? <Tab id={`Blog`} label="Blog" /> : <Tab id={`Blog`} label="Blog" className={classes.hidden} />}
+                    {formBool ? <Tab id={`Forms`} label="Forms" /> : <Tab id={`Forms`} label="Forms" className={classes.hidden} />}
                 </Tabs>
                 <TabLayoutContent>
-                    {value.index == 0 && <Typography variant='caption'> {summary} </Typography>}
+                    {value.index == 0 &&
+                        <Grid>
+                            <Typography > {summary} </Typography>
+                            {smBool && <Button className={classes.button} href={smLink} endIcon={<Icon name="chevron-right"/>}> See More </Button>}
+                        </Grid>}
                     {value.index == 1 && <Directory /> }
                     {value.index == 2 && <Blog /> }
                     {value.index == 3 && <FormView formList={formList}/>}
