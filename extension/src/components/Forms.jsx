@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import { withStyles } from '@ellucian/react-design-system/core/styles';
-import { Button, TextField, List, ListItemText, FormControl, FormControlLabel, FormLabel, FormGroup, Checkbox, ListItem, Grid, Typography, TextLink } from '@ellucian/react-design-system/core';
+import { Button, Chip, TextField, List, ListItemText, FormControl, FormControlLabel, FormLabel, FormGroup, Checkbox, ListItem, Grid, Typography, TextLink } from '@ellucian/react-design-system/core';
 import PropTypes from 'prop-types';
 import FormView from './FormView';
 import { spacing60 } from '@ellucian/react-design-system/core/styles/tokens';
@@ -14,9 +14,13 @@ const styles = theme => ({
     },
     input: {
       marginRight: 20,
-      marginLeft: 20
+      marginLeft: 20,
+      marginTop: 20,
+      marginBottom: 20
+    },
+    chip: {
+      margin: 5
     }
-
 });
 
 function Forms({formList, handleAddForm, handleDeleteForm, classes}) {
@@ -24,13 +28,13 @@ function Forms({formList, handleAddForm, handleDeleteForm, classes}) {
   const [url, setUrl] = useState('')
   const [label, setLabel] = useState('')
   const roleList = ['advisor', 'alumni', 'employee', 'instructor', 'student', 'vendor'];
-  // a useState variable that is a single object with keys of role names and values of booleans
   const [role, setRole] = useState(roleList.reduce((obj, roleName) => ({...obj, [roleName]: false}), {}))
   const handleSubmit = () => {
     handleAddForm({url, label, role})
     setUrl('');
     setLabel('');
-    setRole(roleList.map( (roleName) => ({[roleName]: false})));
+    setRole(roleList.reduce((obj, roleName) => ({...obj, [roleName]: false}), {}));
+    console.log(role)
   };
 
   const handleChange = name => event => {
@@ -42,13 +46,8 @@ function Forms({formList, handleAddForm, handleDeleteForm, classes}) {
     newFormList.splice(index, 1);
     handleDeleteForm(...newFormList)
   }
-  console.log("role: ")
-  console.log(role)
-  console.log("roleList: ")
-  console.log(roleList)
-
   return (
-    <Grid container className={classes.forms} direction="column" justifyContent="space-evenly" alignItems="flex-start" >
+    <Grid className={classes.forms} direction="column" justifyContent="space-evenly" alignItems="flex-start" >
       <Typography variant="h3">Add Form</Typography>
       <Grid item direction="row" justifyContent="space-evenly" alignItems="center" >
         <TextField
@@ -93,18 +92,16 @@ function Forms({formList, handleAddForm, handleDeleteForm, classes}) {
         </div>
       : <List>
         {formList && formList.map( (value, index) => (
-        <Grid containter direction="row" justifyContent="space-evenly" key={index}>
-          <ListItem id="Form" button href={value.url} >
+          <ListItem id="Form" button key={index} href={value.url} >
             <ListItemText primary={value.label} />
+            {Object.keys(value.role).map( (roleName, index) => { return value.role[roleName] ? <Chip className={classes.chip} key={index} label={roleName} /> : null })}
+            <TextLink onClick={() => handleDelete(index)}>Delete</TextLink>
           </ListItem>
-          <TextLink onClick={() => handleDelete(index)}>Delete</TextLink>
-        </Grid>
         ))}
       </List>}
     </Grid>
   )
 }
-
 Forms.propTypes = {
   handleDeleteForm: PropTypes.func,
   handleAddForm: PropTypes.func,

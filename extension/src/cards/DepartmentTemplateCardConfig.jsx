@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import axios from 'axios';
 import PropTypes from 'prop-types';
 import { withStyles } from '@ellucian/react-design-system/core/styles';
 import { TextField, Grid, Switch, FormControlLabel, FormControl, FormGroup, FormLabel, List, ListItem, ListItemText, FormHelperText } from '@ellucian/react-design-system/core';
@@ -39,10 +40,44 @@ const DepartmentTemplateCardConfig = (props) => {
         formBool: false,
         smBool: false,
         dirCode: '',
-        blogEmail: '',
         smLink: '',
-        formList: []
+        formList: [],
+        blogCategories: {}
     })
+    const [categories, setCategories] = useState();
+    const [selectedCategory, setSelectedCategory] = useState();
+    useEffect(() => {
+        axios.get(`https://wordpress.ban.eckerd.edu/wp-json/wp/v2/categories`)
+        .then(response => {
+            response.data.map(category => {
+                if (categories != null) {
+                    setCategories({
+                        ...categories,
+                        [category.name]: category.id
+                    })
+                } else {
+                    setCategories({
+                        [category.name]: category.id
+                    })
+                }
+                
+            })
+        .catch(error => {
+            console.log(error);
+            setCategories([])}
+        )})
+        }, [] );
+    
+    useEffect(() => {
+        axios.get(`https://wordpress.ban.eckerd.edu/wp-json/wp/v2/posts?author_email=${blogEmail}`)
+        .then(response => {
+            setPosts(response.data);
+        })
+        .catch(error => {
+            console.log(error);
+            setPosts([]);
+        });
+    }, [blogEmail]);
     useEffect(() => {
         setCustomConfiguration({
             customConfiguration: {
@@ -85,6 +120,16 @@ const DepartmentTemplateCardConfig = (props) => {
     const handleBlur = e => {
         setIsCustomConfigurationValid(e.target.value !== '');
     }
+    const handleCategories = (name, id) => e => {
+        if (e.target.checked) {
+            console.log(name)
+        } else {
+            console.log(name)
+        }
+        setCardSettings()
+        console.log(cardSettings)
+    }
+
     return (
         <Grid className={classes.card} direction="column" justifyContent="space-between" alignItems="flex-start">
             <TextField
@@ -154,14 +199,21 @@ const DepartmentTemplateCardConfig = (props) => {
                 placeholder="HR-FULL-TIME"
                 value={cardSettings.dirCode}
             />}
-            {cardSettings.blogBool == true && <TextField
-                label= "Email to pull blog posts from"
-                className={classes.input}
-                onBlur={handleBlur}
-                onChange={(e) => handleChange("blogEmail", e)}
-                placeholder="test@eckerd.edu"
-                value={cardSettings.blogEmail}
-            />}
+            {cardSettings.blogBool == true && categories != null &&
+            categories.map((category) => (
+                <FormControlLabel
+                    control={
+                        <Switch
+                            id={`blog${category.id}`}
+                            checked={cardSettings.blogCategories[category.name]}
+                            onChange={handleCategories(category.name, category.id )}
+                            value={category.name}
+                        />
+                    }
+                    label={category.name}
+                    key={category.id}
+                />
+            ))}
             {cardSettings.smBool == true && <TextField
                 label= "See More Link"
                 className={classes.input}
@@ -170,7 +222,7 @@ const DepartmentTemplateCardConfig = (props) => {
                 placeholder="https://www.eckerd.edu"
                 value={cardSettings.smLink}
             />}
-            <Forms formList={cardSettings.formList} handleAddForm={handleAddForm} handleDeleteForm={handleDeleteForm} />
+            <Forms className={classes.input} formList={cardSettings.formList} handleAddForm={handleAddForm} handleDeleteForm={handleDeleteForm} />
         </Grid>
     );
 };

@@ -55,7 +55,6 @@ const DepartmentTemplateCard = (props) => {
                 </Tabs>
                 <TabLayoutContent>
                     {value.index == 0 && <Typography variant='caption'> {summary} </Typography>}
-                    {value.index == 0 && <FormView formList={formList}/> }
                     {value.index == 1 && <Directory /> }
                     {value.index == 2 && <Blog /> }
                     {value.index == 3 && <FormView formList={formList}/>}

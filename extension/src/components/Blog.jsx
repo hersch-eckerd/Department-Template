@@ -13,31 +13,29 @@ const styles = () => ({
         marginRight: spacing40,
         marginBottom: 0,
         marginLeft: spacing40
+    },
+    BlogPost: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        alignItems: 'flex-start'
     }
 });
-const Blog = () => {
+const Blog = ({classes}) => {
+
     const {configuration : {customConfiguration}} = useCardInfo();
     const blogEmail = customConfiguration ? customConfiguration.cardSettings.blogEmail : 'default';
-    // gets posts from wordpress based on user email
     const [posts, setPosts] = useState([]);
-    useEffect(() => {
-        console.log("blog email is " + blogEmail)
-        axios.get(`https://wordpress.ban.eckerd.edu/wp-json/wp/v2/posts?author_email=${blogEmail}`)
-        .then(response => {
-            setPosts(response.data);
-        })
-        .catch(error => {
-            console.log(error);
-            setPosts([]);
-        });
-    }, [blogEmail]);
+    
     return (
         <List>
         {posts.map(post => (
-            <ListItem key={post.id}>
-                <TextLink href={post.link}
-                    >{post.title.rendered}
-                </TextLink>
+            <ListItem className={classes.BlogPost} key={post.id} divider>
+                <Typography variant="h4">
+                    <TextLink href={post.link}>
+                        {post.title.rendered}
+                    </TextLink>
+                </Typography>
                 <div dangerouslySetInnerHTML={{ __html: post.content.rendered }} />
             </ListItem>
         ))}
