@@ -60,24 +60,13 @@ const DepartmentTemplateCardConfig = (props) => {
                         [category.name]: category.id
                     })
                 }
-                
+                return null;
             })
         .catch(error => {
             console.log(error);
             setCategories([])}
         )})
         }, [] );
-    
-    useEffect(() => {
-        axios.get(`https://wordpress.ban.eckerd.edu/wp-json/wp/v2/posts?author_email=${blogEmail}`)
-        .then(response => {
-            setPosts(response.data);
-        })
-        .catch(error => {
-            console.log(error);
-            setPosts([]);
-        });
-    }, [blogEmail]);
     useEffect(() => {
         setCustomConfiguration({
             customConfiguration: {
