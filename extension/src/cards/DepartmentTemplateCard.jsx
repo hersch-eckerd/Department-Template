@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { withStyles } from '@ellucian/react-design-system/core/styles';
 import { spacing40 } from '@ellucian/react-design-system/core/styles/tokens';
-import { Button, Typography, Tabs, Tab, List, ListItem, ListItemText, TabLayout, TextLink, TabLayoutContent, Grid } from '@ellucian/react-design-system/core';
+import { Button, Typography, Tabs, Tab, TabLayout, TabLayoutContent, Grid } from '@ellucian/react-design-system/core';
 import { Icon } from '@ellucian/ds-icons/lib';
 import Directory from "../components/Directory";
 import Blog from "../components/Blog.jsx";

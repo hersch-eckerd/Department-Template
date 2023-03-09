@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import { withStyles } from '@ellucian/react-design-system/core/styles';
 import { Button, Chip, TextField, List, ListItemText, FormControl, FormControlLabel, FormLabel, FormGroup, Checkbox, ListItem, Grid, Typography, TextLink } from '@ellucian/react-design-system/core';
 import PropTypes from 'prop-types';
-import FormView from './FormView';
 import { spacing60 } from '@ellucian/react-design-system/core/styles/tokens';
 const styles = theme => ({
   root: {
@@ -24,7 +23,6 @@ const styles = theme => ({
 });
 
 function Forms({formList, handleAddForm, handleDeleteForm, classes}) {
-
   const [url, setUrl] = useState('')
   const [label, setLabel] = useState('')
   const roleList = ['advisor', 'alumni', 'employee', 'instructor', 'student', 'vendor'];
@@ -36,7 +34,7 @@ function Forms({formList, handleAddForm, handleDeleteForm, classes}) {
     setRole(roleList.reduce((obj, roleName) => ({...obj, [roleName]: false}), {}));
   };
 
-  const handleChange = name => event => {
+  const handleRole = name => event => {
     setRole({...role, [name]: event.target.checked });
   };
 
@@ -47,7 +45,7 @@ function Forms({formList, handleAddForm, handleDeleteForm, classes}) {
     newFormList.splice(index, 1);
     console.log("index :")
     console.log(index)
-    handleDeleteForm(...newFormList)
+    handleDeleteForm([...newFormList])
   }
   return (
     <Grid className={classes.forms} direction="column" justifyContent="space-evenly" alignItems="flex-start" >
@@ -56,29 +54,28 @@ function Forms({formList, handleAddForm, handleDeleteForm, classes}) {
         <TextField
           className={classes.input}
           value={url}
-          onChange={(event) => setUrl(event.target.value)}
+          onChange={(e) => setUrl(e.target.value)}
           label= "URL of Form" />
         <TextField
           className={classes.input}
           value={label}
-          onChange={(event) => setLabel(event.target.value)}
+          onChange={(e) => setLabel(e.target.value)}
           label= "Label of Form" />
         <FormControl >
           <FormLabel component="legend">Roles to show form</FormLabel>
           <FormGroup>
-          {roleList.map( (roleName, index) => {
-            return (
+          {roleList.map( (roleName, index) => (
               <FormControlLabel key={index}
                 control={
                   <Checkbox
                     checked={role[roleName]}
-                    onChange={handleChange([roleName])}
+                    onChange={handleRole([roleName])}
                     value={role[roleName]}
                     />
                   }
                 label={roleName}
                 />
-            )})}
+            ))}
           </FormGroup>
         </FormControl>
         <Button
@@ -87,7 +84,7 @@ function Forms({formList, handleAddForm, handleDeleteForm, classes}) {
             Add Value
         </Button>
       </Grid>
-      {!formList || !Array.isArray(formList) || formList.length == 0
+      { !formList || !Array.isArray(formList) || formList.length == 0
       ? <div>
           <Typography color="textSecondary">
               No forms found.
@@ -97,14 +94,15 @@ function Forms({formList, handleAddForm, handleDeleteForm, classes}) {
         {formList && formList.map( (value, index) => (
           <ListItem id="Form" button key={index} href={value.url} >
             <ListItemText primary={value.label} />
-            {Object.keys(value.role).map( (roleName, index) => { return value.role[roleName] ? <Chip className={classes.chip} key={index} label={roleName} /> : null })}
+            {Object.keys(value.role).map( (roleName, index) => (value.role[roleName] ? <Chip className={classes.chip} key={index} label={roleName} /> : null ))}
             <TextLink onClick={() => handleDelete(index)}>Delete</TextLink>
           </ListItem>
         ))}
-      </List>}
+      </List> }
     </Grid>
   )
 }
+
 Forms.propTypes = {
   handleDeleteForm: PropTypes.func,
   handleAddForm: PropTypes.func,

@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@ellucian/react-design-system/core/styles';
 import { TextField, Grid, Switch, FormControlLabel, FormControl, FormGroup, FormLabel, List, ListItem, ListItemText, FormHelperText } from '@ellucian/react-design-system/core';
 import Forms from '../components/Forms.jsx';
-import FormView from '../components/FormView.jsx';
 import { spacing40 } from '@ellucian/react-design-system/core/styles/tokens';
 
 const styles = () => ({
@@ -34,7 +33,7 @@ const DepartmentTemplateCardConfig = (props) => {
         }, classes
     } = props;
     const [cardSettings, setCardSettings] = useState(customConfiguration ? customConfiguration.client.cardSettings : {
-        summary: '',
+        summary: 'Summary',
         dirBool: false,
         blogBool: false,
         formBool: false,
@@ -68,20 +67,20 @@ const DepartmentTemplateCardConfig = (props) => {
             setCategories([])}
         )})
         }, [] ) */
-
-    useEffect(() => {
+    const setConfig = (settings) => {
         setCustomConfiguration({
             customConfiguration: {
-                client: {cardSettings}
+                client: settings
             }
         })
-    }, [cardSettings])
+    }
 
     const handleAddForm = (form) => {
         setCardSettings({
             ...cardSettings,
             formList: [...cardSettings.formList, form]
         })
+        setConfig(cardSettings)
     }
     const handleDeleteForm = (form) => {
         console.log("card config delete form")
@@ -97,18 +96,21 @@ const DepartmentTemplateCardConfig = (props) => {
                 formList: []
             })
         }
+        setConfig(cardSettings)
     }
     const handleChange = (tabLabel, e) => {
         setCardSettings({
             ...cardSettings,
             [tabLabel]: e.target.value
         })
+        setConfig(cardSettings)
     }
     const handleSwitch = name => event => {
         setCardSettings({
             ...cardSettings,
             [name]: event.target.checked
         })
+        setConfig(cardSettings)
     }
     const handleBlur = e => {
         setIsCustomConfigurationValid(e.target.value !== '');
@@ -145,6 +147,7 @@ const DepartmentTemplateCardConfig = (props) => {
                                 checked={cardSettings.dirBool}
                                 onChange={handleSwitch("dirBool")}
                                 value={cardSettings.dirBool}
+                                onBlur={handleBlur}
                             />
                         }
                         label="Show Directory?"
@@ -192,7 +195,7 @@ const DepartmentTemplateCardConfig = (props) => {
                 placeholder="HR-FULL-TIME"
                 value={cardSettings.dirCode}
             />}
-            {cardSettings.blogBool == true && categories != null &&
+            {/* cardSettings.blogBool == true && categories != null &&
             categories.map((category) => (
                 <FormControlLabel
                     control={
@@ -206,7 +209,7 @@ const DepartmentTemplateCardConfig = (props) => {
                     label={category.name}
                     key={category.id}
                 />
-            ))}
+            )) */}
             {cardSettings.smBool == true && <TextField
                 label= "See More Link"
                 className={classes.input}
