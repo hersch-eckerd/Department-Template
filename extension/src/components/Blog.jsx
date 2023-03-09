@@ -35,6 +35,7 @@ const Blog = ({classes}) => {
             setPosts([]);
         });
     }, [blogEmail]);
+
     return (
         <List>
         {posts.map(post => (

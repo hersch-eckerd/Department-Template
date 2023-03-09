@@ -29,21 +29,25 @@ function Forms({formList, handleAddForm, handleDeleteForm, classes}) {
   const [label, setLabel] = useState('')
   const roleList = ['advisor', 'alumni', 'employee', 'instructor', 'student', 'vendor'];
   const [role, setRole] = useState(roleList.reduce((obj, roleName) => ({...obj, [roleName]: false}), {}))
+
   const handleSubmit = () => {
     handleAddForm({url, label, role})
     setUrl('');
     setLabel('');
     setRole(roleList.reduce((obj, roleName) => ({...obj, [roleName]: false}), {}));
-    console.log(role)
-  };
+  }
 
   const handleChange = name => event => {
     setRole({...role, [name]: event.target.checked });
-  };
+  }
 
   const handleDelete = (index) => {
     const newFormList = [...formList];
+    console.log("previous form list:")
+    console.log(newFormList)
     newFormList.splice(index, 1);
+    console.log("index :")
+    console.log(index)
     handleDeleteForm(...newFormList)
   }
   return (
@@ -53,12 +57,12 @@ function Forms({formList, handleAddForm, handleDeleteForm, classes}) {
         <TextField
           className={classes.input}
           value={url}
-          onChange={(event) => setUrl(event.target.value)}
+          onChange={event => setUrl(event.target.value)}
           label= "URL of Form" />
         <TextField
           className={classes.input}
           value={label}
-          onChange={(event) => setLabel(event.target.value)}
+          onChange={event => setLabel(event.target.value)}
           label= "Label of Form" />
         <FormControl >
           <FormLabel component="legend">Roles to show form</FormLabel>

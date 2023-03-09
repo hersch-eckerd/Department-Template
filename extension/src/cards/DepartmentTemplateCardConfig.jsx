@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@ellucian/react-design-system/core/styles';
 import { TextField, Grid, Switch, FormControlLabel, FormControl, FormGroup, FormLabel, List, ListItem, ListItemText, FormHelperText } from '@ellucian/react-design-system/core';
 import Forms from '../components/Forms.jsx';
-import FormView from '../components/FormView.jsx';
 import { spacing40 } from '@ellucian/react-design-system/core/styles/tokens';
 
 const styles = () => ({
@@ -42,31 +41,19 @@ const DepartmentTemplateCardConfig = (props) => {
         dirCode: '',
         smLink: '',
         formList: [],
-        blogCategories: {}
+        blogCategories: {},
+        blogEmail: ''
     })
     const [categories, setCategories] = useState();
-    const [selectedCategory, setSelectedCategory] = useState();
+    const [selectedCategory, setSelectedCategory] = useState()
+
     useEffect(() => {
         axios.get(`https://wordpress.ban.eckerd.edu/wp-json/wp/v2/categories`)
         .then(response => {
-            response.data.map(category => {
-                if (categories != null) {
-                    setCategories({
-                        ...categories,
-                        [category.name]: category.id
-                    })
-                } else {
-                    setCategories({
-                        [category.name]: category.id
-                    })
-                }
-                return null;
-            })
-        .catch(error => {
-            console.log(error);
-            setCategories([])}
-        )})
-        }, [] );
+            console.log(response)
+        })
+    }, [cardSettings] )
+
     useEffect(() => {
         setCustomConfiguration({
             customConfiguration: {
@@ -82,6 +69,8 @@ const DepartmentTemplateCardConfig = (props) => {
         })
     }
     const handleDeleteForm = (form) => {
+        console.log("card config delete form")
+        console.log(form)
         if (form != null) {
             setCardSettings({
                 ...cardSettings,
@@ -115,14 +104,13 @@ const DepartmentTemplateCardConfig = (props) => {
         } else {
             console.log(name)
         }
-        setCardSettings()
-        console.log(cardSettings)
     }
 
     return (
         <Grid className={classes.card} direction="column" justifyContent="space-between" alignItems="flex-start">
             <TextField
                 label="Summary"
+                placeholder="Summary of the department"
                 className={classes.input}
                 multiline
                 onBlur={handleBlur}
@@ -189,20 +177,23 @@ const DepartmentTemplateCardConfig = (props) => {
                 value={cardSettings.dirCode}
             />}
             {cardSettings.blogBool == true && categories != null &&
-            categories.map((category) => (
-                <FormControlLabel
-                    control={
-                        <Switch
-                            id={`blog${category.id}`}
-                            checked={cardSettings.blogCategories[category.name]}
-                            onChange={handleCategories(category.name, category.id )}
-                            value={category.name}
-                        />
-                    }
-                    label={category.name}
-                    key={category.id}
-                />
-            ))}
+            categories.map((category) => {
+            console.log(category)
+                return (
+                    <FormControlLabel
+                        control={
+                            <Switch
+                                id={`blog${category.id}`}
+                                checked={cardSettings.blogCategories[category.name]}
+                                onChange={handleCategories(category.name, category.id )}
+                                value={category.name}
+                            />
+                        }
+                        label={category.name}
+                        key={category.id}
+                    />
+                )
+            })}
             {cardSettings.smBool == true && <TextField
                 label= "See More Link"
                 className={classes.input}
