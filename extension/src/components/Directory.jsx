@@ -29,7 +29,7 @@ const Directory = () => {
         </ListItem>
     })} */
 
-    return <Typography>test</Typography>
+    return <Typography>Directory Component</Typography>
 };
 
 Directory.propTypes = {

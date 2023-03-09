@@ -22,7 +22,6 @@ const styles = () => ({
     }
 });
 const Blog = ({classes}) => {
-
     const {configuration : {customConfiguration}} = useCardInfo();
     const blogEmail = customConfiguration ? customConfiguration.cardSettings.blogEmail : 'default';
     const [posts, setPosts] = useState([]);

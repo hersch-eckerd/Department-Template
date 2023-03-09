@@ -41,12 +41,13 @@ const DepartmentTemplateCardConfig = (props) => {
         dirCode: '',
         smLink: '',
         formList: [],
-        blogCategories: {}
+        blogCategories: {},
+        blogEmail: ''
     })
     const [categories, setCategories] = useState();
     const [selectedCategory, setSelectedCategory] = useState()
 
-    /* useEffect(() => {
+    useEffect(() => {
         axios.get(`https://wordpress.ban.eckerd.edu/wp-json/wp/v2/categories`)
         .then(response => {
             response.data.map(category => {
@@ -121,14 +122,13 @@ const DepartmentTemplateCardConfig = (props) => {
         } else {
             console.log(name)
         }
-        setCardSettings()
-        console.log(cardSettings)
     }
 
     return (
         <Grid className={classes.card} direction="column" justifyContent="space-between" alignItems="flex-start">
             <TextField
                 label="Summary"
+                placeholder="Summary of the department"
                 className={classes.input}
                 multiline
                 onBlur={handleBlur}
@@ -195,7 +195,7 @@ const DepartmentTemplateCardConfig = (props) => {
                 placeholder="HR-FULL-TIME"
                 value={cardSettings.dirCode}
             />}
-            {/* cardSettings.blogBool == true && categories != null &&
+            {cardSettings.blogBool == true && categories != null &&
             categories.map((category) => (
                 <FormControlLabel
                     control={
@@ -209,7 +209,7 @@ const DepartmentTemplateCardConfig = (props) => {
                     label={category.name}
                     key={category.id}
                 />
-            )) */}
+            ))}
             {cardSettings.smBool == true && <TextField
                 label= "See More Link"
                 className={classes.input}

@@ -27,16 +27,17 @@ function Forms({formList, handleAddForm, handleDeleteForm, classes}) {
   const [label, setLabel] = useState('')
   const roleList = ['advisor', 'alumni', 'employee', 'instructor', 'student', 'vendor'];
   const [role, setRole] = useState(roleList.reduce((obj, roleName) => ({...obj, [roleName]: false}), {}))
+
   const handleSubmit = () => {
     handleAddForm({url, label, role})
     setUrl('');
     setLabel('');
     setRole(roleList.reduce((obj, roleName) => ({...obj, [roleName]: false}), {}));
-  };
+  }
 
   const handleRole = name => event => {
     setRole({...role, [name]: event.target.checked });
-  };
+  }
 
   const handleDelete = (index) => {
     const newFormList = [...formList];
